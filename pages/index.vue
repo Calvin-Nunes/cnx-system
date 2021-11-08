@@ -5,12 +5,8 @@
         <img id="logo" src="" alt="CNX"/>
       </div>
       <div class="nav-right">
-        <button id="register-btn">
-          <NuxtLink to="register">Register</NuxtLink>
-        </button>
-        <button id="login-btn">
-          <NuxtLink to="login">Log In</NuxtLink>
-        </button>
+        <cnx-button caption="Log In" theme="light" route="login"></cnx-button>
+        <cnx-button caption="Register" theme="light" route="register"></cnx-button>
       </div>
     </nav>
     <section class="page-content">

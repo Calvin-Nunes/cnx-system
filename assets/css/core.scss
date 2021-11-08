@@ -1,3 +1,19 @@
+:root {
+  --system-primary: rgba(65, 200, 155, 1);
+  --system-secondary: rgba(240, 255, 255, 1);
+
+  //Theming Colors  
+  --color-primary: rgba(50, 100, 215, 0.8);
+  --color-success: rgba(30, 140, 55, 0.92);
+  --color-warning: rgba(190, 160, 15, 0.92);
+  --color-danger: rgba(195, 50, 35, 0.92);
+  --color-light: rgba(255, 255, 255, 0.92);
+  --color-dark: rgba(40, 50, 70, 0.92);
+
+  --soft-border-color: rgba(0, 0, 0, 0.2);
+  --soft-background-color: rgba(0, 0, 0, 0.05);
+}
+
 * {
   box-sizing: border-box;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
@@ -28,16 +44,7 @@ a {
   color: unset;
 }
 
-:root {
-  --system-primary: rgba(65, 200, 155, 1);
-  --system-secondary: rgba(240, 255, 255, 1);
-  --sucess: rgba(45, 185, 105, 1);
-  --warning: rgba(205, 200, 95, 1);
-  --danger: rgba(185, 45, 45, 1);
-  --soft: rgba(240, 240, 240, 0.95);
-  --soft-border-color: rgba(0, 0, 0, 0.2);
-  --soft-background-color: rgba(0, 0, 0, 0.05);
-}
+
 
 .page-wrapper {
   position: relative;
@@ -72,23 +79,6 @@ a {
   justify-self: flex-end;
   max-width: 65%;
   padding: 1px 4px;
-}
-
-.page-wrapper nav .nav-right button {
-  background-color: var(--soft);
-  border: 1px solid var(--soft-border-color);
-  border-radius: 2px;
-  min-width: 75px;
-  min-height: 32px;
-  transition: 0.3s all ease-out;
-  box-shadow: 0 1px 5px var(--soft-border-color);
-  cursor: pointer;
-}
-
-.page-wrapper nav .nav-right button:hover {
-  color: white;
-  background-color: var(--system-primary);
-  box-shadow: 0px 0px 0px;
 }
 
 .page-wrapper > .page-content {
@@ -130,4 +120,10 @@ a {
 .banner-box {
   width: 100%;
   max-height: 320px;
+}
+
+.disabled{
+  filter: grayscale(.5);
+  pointer-events: none;
+  user-select: all;
 }
