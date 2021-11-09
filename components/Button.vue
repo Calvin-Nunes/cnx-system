@@ -78,9 +78,9 @@ export default Button
   align-items: center;
   outline: none;
   border-radius: 2px;
-  margin: 1px;
+  margin: 2px;
   cursor: pointer;
-  box-shadow: 0 1px 3px var(--soft-border-color);
+  box-shadow: 0 1px 5px var(--soft-border-color);
   transition: 0.3s all ease-out;
 }
 
@@ -94,13 +94,13 @@ export default Button
 
 //sizes
 .button-default {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .button-big {
   min-width: 250px;
   min-height: 50px;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .button-small {

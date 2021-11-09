@@ -4,23 +4,22 @@
 			<section>
 				<div class="center-content">
 					<img src="" alt="CNX System" style="margin: 15px auto" />
-					<p class="page-description">Register now to access all features of CNX System</p>
+					<p class="page-title">Log In</p>
 				</div>
 			</section>
 			<section>
 				<div class="form-holder">
 					<form>
 						<fieldset>
-							<cnx-input v-model="username" label="Username" icon="fas fa-user"></cnx-input>
 							<cnx-input v-model="email" label="Email" icon="fas fa-envelope"></cnx-input>
 							<cnx-input v-model="password" secure="true" label="Password" icon="fas fa-lock"></cnx-input>
 						</fieldset>
 					</form>
-					<cnx-button caption="Register" theme="success" size="big" :onTap="doRegister" :disabled="isRegistering" style="margin: 12px auto"></cnx-button>
+					<cnx-button caption="Log In" theme="success" size="big" :onTap="doRegister" :disabled="isLoggin" style="margin: 12px auto"></cnx-button>
 					<p v-if="error.length" class="validation-error-message">
 						{{ error }}
 					</p>
-					<loadSpinner v-else-if="isRegistering" :loading="isRegistering"></loadSpinner>
+					<loadSpinner v-else-if="isLoggin" :loading="isLoggin"></loadSpinner>
 				</div>
 			</section>
 		</div>
@@ -36,11 +35,10 @@ export default Vue.extend({
 	components: { loadSpinner: LoadSpinner },
 	data: () => {
 		return {
-			username: "",
 			email: "",
 			password: "",
 			error: "",
-			isRegistering: false,
+			isLoggin: false,
 		};
 	},
 
@@ -48,47 +46,31 @@ export default Vue.extend({
 		doRegister: function () {
 			this.error = "";
 			if (this.validData()) {
-				this.isRegistering = true;
-				let newUser = {
-					username: this.username,
+				this.isLoggin = true;
+				let loginUser = {
 					email: this.email,
 					password: this.password,
 				};
 
-				let apiRegisterEndpoint = "";
+				let apiLoginEndpoint = "";
 
 				this.$axios
-					.put(apiRegisterEndpoint, newUser)
+					.put(apiLoginEndpoint, loginUser)
 					.then(function (result) {})
 					.catch(function (error) {});
 			}
 		},
 
 		validData(): boolean {
-			if (LibUtils.isEmpty(this.username)) {
-				this.error = "Username must be filled.";
-				return false;
-			}
 			if (LibUtils.isEmpty(this.email)) {
 				this.error = "Email must be filled.";
-				return false;
-			} else if (LibUtils.isValidEmail(this.email)) {
-				this.error = "Email is not valid.";
 				return false;
 			}
 
 			if (LibUtils.isEmpty(this.password)) {
 				this.error = "Password must be filled";
 				return false;
-			} else {
-				if (this.password.length < 6) {
-					this.error = "Password must have at least 6 characters";
-				} else {
-					if (/\d/.test(this.password) === false) {
-						this.error = "Password must have at least 1 number";
-					}
-				}
-			}
+			} 
 
 			return true;
 		},

@@ -1,6 +1,13 @@
+import { resolve } from 'path';
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
+
+  alias: {
+    '@interfaces': resolve(__dirname, './interfaces'),
+    '@components': resolve(__dirname, './components'),
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -9,8 +16,8 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        hid: 'description',
-        name: 'description',
+        hid: 'main-head',
+        name: 'cnx-system',
         content:
           'CNX System is a Web Application created by Calvin Nunes to test and produce contents using Vue.Js, Nuxt.js and Typescript',
       },
@@ -20,7 +27,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@assets/css/core.css'],
+  css: ['@assets/css/core.css','@assets/css/fa-all.min.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['~/plugins/core-components.js'],
