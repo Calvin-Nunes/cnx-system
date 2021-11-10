@@ -1,9 +1,8 @@
 <template>
-	<div class="page-wrapper">
-		<div class="padded-content">
+		<div class="page-content padded-content">
 			<section>
 				<div class="center-content">
-					<img src="" alt="CNX System" style="margin: 15px auto" />
+					<img src="~/assets/images/logo.png" alt="CNX System" class="page-content-image" width="100%"/>
 					<p class="page-title">Log In</p>
 				</div>
 			</section>
@@ -15,6 +14,7 @@
 							<cnx-input v-model="password" secure="true" label="Password" icon="fas fa-lock"></cnx-input>
 						</fieldset>
 					</form>
+					<span><nuxt-link class='password-recovery-link' to='/password-recovery'>Forgot your password?</nuxt-link></span>
 					<cnx-button caption="Log In" theme="success" size="big" :onTap="doRegister" :disabled="isLoggin" style="margin: 12px auto"></cnx-button>
 					<p v-if="error.length" class="validation-error-message">
 						{{ error }}
@@ -23,7 +23,6 @@
 				</div>
 			</section>
 		</div>
-	</div>
 </template>
 
 <script lang="ts">
@@ -40,6 +39,10 @@ export default Vue.extend({
 			error: "",
 			isLoggin: false,
 		};
+	},
+
+	created() {
+		this.$store.dispatch("tooglePageFooter", false);
 	},
 
 	methods: {
@@ -70,7 +73,7 @@ export default Vue.extend({
 			if (LibUtils.isEmpty(this.password)) {
 				this.error = "Password must be filled";
 				return false;
-			} 
+			}
 
 			return true;
 		},
@@ -101,5 +104,11 @@ export default Vue.extend({
 	color: var(--color-danger);
 	font-size: 18px;
 	text-align: center;
+}
+
+.password-recovery-link{
+	font-size: 12px;
+	color: #666666;
+	padding: 0 18px;
 }
 </style>

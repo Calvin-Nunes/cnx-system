@@ -128,9 +128,10 @@ export default Button
 }
 
 .theme-light:hover {
-  background-color: var(--system-primary);
+  background-color: var(--system-secondary-color-dark);
+  border-color: var(--system-primary-color-dark);
   opacity: 0.9;
-  color: #ffffff;
+  color: var(--system-primary-color);
 }
 
 .theme-dark {

@@ -1,29 +1,27 @@
 <template>
-	<div class="page-wrapper">
-		<div class="padded-content">
-			<section>
-				<div class="center-content">
-					<img src="" alt="CNX System" style="margin: 15px auto" />
-					<p class="page-description">Register now to access all features of CNX System</p>
-				</div>
-			</section>
-			<section>
-				<div class="form-holder">
-					<form>
-						<fieldset>
-							<cnx-input v-model="username" label="Username" icon="fas fa-user"></cnx-input>
-							<cnx-input v-model="email" label="Email" icon="fas fa-envelope"></cnx-input>
-							<cnx-input v-model="password" secure="true" label="Password" icon="fas fa-lock"></cnx-input>
-						</fieldset>
-					</form>
-					<cnx-button caption="Register" theme="success" size="big" :onTap="doRegister" :disabled="isRegistering" style="margin: 12px auto"></cnx-button>
-					<p v-if="error.length" class="validation-error-message">
-						{{ error }}
-					</p>
-					<loadSpinner v-else-if="isRegistering" :loading="isRegistering"></loadSpinner>
-				</div>
-			</section>
-		</div>
+	<div class="padded-content page-content">
+		<section>
+			<div class="center-content">
+				<img src="~/assets/images/logo.png" alt="CNX System" class="page-content-image" width="100%" />
+				<p class="page-description">Register now to access all features of CNX System</p>
+			</div>
+		</section>
+		<section>
+			<div class="form-holder">
+				<form>
+					<fieldset>
+						<cnx-input v-model="username" label="Username" icon="fas fa-user"></cnx-input>
+						<cnx-input v-model="email" label="Email" icon="fas fa-envelope"></cnx-input>
+						<cnx-input v-model="password" secure="true" label="Password" icon="fas fa-lock"></cnx-input>
+					</fieldset>
+				</form>
+				<cnx-button caption="Register" theme="success" size="big" :onTap="doRegister" :disabled="isRegistering" style="margin: 12px auto"></cnx-button>
+				<p v-if="error.length" class="validation-error-message">
+					{{ error }}
+				</p>
+				<loadSpinner v-else-if="isRegistering" :loading="isRegistering"></loadSpinner>
+			</div>
+		</section>
 	</div>
 </template>
 
@@ -42,6 +40,10 @@ export default Vue.extend({
 			error: "",
 			isRegistering: false,
 		};
+	},
+
+	created() {
+		this.$store.dispatch("tooglePageFooter", false);
 	},
 
 	methods: {

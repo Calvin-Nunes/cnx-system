@@ -23,7 +23,7 @@ export default LoadSpinner
   display: inline-flex;
   animation: spin infinite 1s ease-in-out;
   margin: 4px auto;
-  color: var(--system-primary);
+  color: var(--system-primary-color);
   border-radius: 50%;
 }
 

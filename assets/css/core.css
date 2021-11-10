@@ -1,6 +1,9 @@
 :root {
-  --system-primary: rgb(60, 215, 170);
-  --system-secondary: rgba(240, 255, 255, 1);
+  --system-primary-color: rgb(50, 195, 150);
+  --system-primary-color-dark: rgb(15, 140, 95);
+  --system-secondary-color: rgb(240, 255, 255);
+  --system-secondary-color-dark: rgb(220, 240, 240);
+  --system-third-color: rgb(5, 85, 50);
   --color-primary: rgba(50, 140, 200, 0.92);
   --color-success: rgba(30, 140, 55, 0.92);
   --color-warning: rgba(190, 160, 15, 0.92);
@@ -15,9 +18,12 @@
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
+/*
+GLOBAL TAGS STYLES
+*/
 html,
 body {
   width: 100vw;
@@ -40,8 +46,18 @@ li {
 a {
   text-decoration: none;
   color: unset;
+  -webkit-transition: 0.2s all ease-out;
+  transition: 0.2s all ease-out;
 }
 
+a:hover {
+  color: var(--system-primary-color) !important;
+  cursor: pointer;
+}
+
+/*
+PAGES STRUCTURE STYLES
+*/
 .page-wrapper {
   position: relative;
   width: 100%;
@@ -49,47 +65,9 @@ a {
   overflow: hidden;
 }
 
-.page-wrapper > nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: 100%;
-  height: 40px;
-  border-bottom: 1px solid var(--soft-border-color);
-  padding: 0 1%;
-}
-
-.page-wrapper > nav button {
-  margin: 0 2px;
-}
-
-.page-wrapper nav .nav-left {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  justify-self: flex-start;
-  max-width: 35%;
-  padding: 1px 4px;
-}
-
-.page-wrapper nav .nav-right {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  justify-self: flex-end;
-  max-width: 65%;
-  padding: 1px 4px;
-}
-
-.page-wrapper > .page-content {
+.page-wrapper .page-content {
   position: absolute;
-  top: 40px;
+  top: 45px;
   left: 0;
   overflow-y: auto;
   display: -webkit-box;
@@ -100,48 +78,41 @@ a {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 100%;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 135px);
   padding: 2px 4px;
 }
 
-.page-wrapper > footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 90px;
+.page-wrapper.no-footer .page-content {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  height: auto;
+  min-height: calc(100vh - 45px);
+}
+
+.page-content-image {
+  margin: 12px auto;
   width: 100%;
-  border-top: 1px solid var(--soft-border-color);
-  background-color: var(--soft-background-color);
-}
-
-.page-wrapper > footer > .footer-column {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 33.33%;
-  font-size: 13px;
-}
-
-.page-wrapper > footer > .footer-column p {
-  margin: 2px;
+  max-width: 180px;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .banner-box {
   width: 100%;
   max-height: 320px;
+  text-align: center;
+  margin: 10px auto;
+  padding: 2px;
+}
+
+.banner-box img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .center-content {
@@ -160,7 +131,7 @@ a {
 
 .page-title {
   font-size: 24px;
-  color: var(--system-primary);
+  color: var(--system-primary-color);
   width: 100%;
   text-align: center;
   margin: 8px 0;
@@ -173,6 +144,9 @@ a {
   text-align: center;
 }
 
+/*
+GLOBAL REUSEABLE STYLES
+*/
 .padded-content {
   padding: 5px;
 }
@@ -185,5 +159,14 @@ a {
      -moz-user-select: all;
       -ms-user-select: all;
           user-select: all;
+}
+
+.block-button {
+  padding: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 2px;
+  border: 1px solid var(--system-primary-color-dark);
 }
 /*# sourceMappingURL=core.css.map */

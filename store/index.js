@@ -1,23 +1,32 @@
 // holds your root state
 export const state = () => ({
-    user: null
-  })
-  
-  //Actions
-  export const actions = {
-    setLoggedUser({ state, commit }){
-      commit('setUser', state.loggedUser)
-    }
-  }
+	user: null,
+	showPageFooter: true,
+});
 
-  //Mutations
-  export const mutations = {
-    setUser(state, user){
-      state.user = user
-    }
-  }
+//Actions
+export const actions = {
+	setLoggedUser({ commit }, loggedUser) {
+		commit("setUser", loggedUser);
+	},
+	tooglePageFooter({ commit }, shouldShow) {
+		commit("setPageFooter", shouldShow);
+	},
+};
 
-  //Getters
-  export const getters = {
-      loggedUser(state){ return state.user}
-  }
+//Mutations
+export const mutations = {
+	setUser(state, user) {
+		state.user = user;
+	},
+	setPageFooter(state, shouldShow) {
+		state.showPageFooter = shouldShow;
+	},
+};
+
+//Getters
+export const getters = {
+	loggedUser(state) {
+		return state.user;
+	},
+};
