@@ -1,18 +1,17 @@
 <template>
 	<nav class="page-navbar">
 		<div class="nav-left">
-			<nuxt-link to="/" class='logo-link'>
-				<img id="navbar-logo" src="~/assets/images/logo-white.png" alt="CNX" />
+			<nuxt-link to="/" class="logo-link">
+				<img id="navbar-logo" src="~/assets/images/logo-white.png" alt="Logo" />
 			</nuxt-link>
 		</div>
 		<div class="nav-right">
-			<cnx-button caption="Log In" theme="light" route="login"></cnx-button>
-			<cnx-button caption="Register" theme="light" route="register"></cnx-button>
+			<p>Future - Desafio MealDB API</p>
 		</div>
 	</nav>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import LibUtils from "static/libraries/libUtils";
 
@@ -51,10 +50,10 @@ nav {
 	padding: 1px 4px;
 }
 
-.nav-left a.logo-link{
+.nav-left a.logo-link {
 	margin: 0 4px;
-    width: 36px;
-    height: 36px;
+	width: 36px;
+	height: 36px;
 }
 
 .nav-left #navbar-logo {
@@ -67,9 +66,7 @@ nav {
 	justify-self: flex-end;
 	max-width: 65%;
 	padding: 1px 4px;
+	color: #fff;
 }
 
-button {
-	margin: 0 2px;
-}
 </style>

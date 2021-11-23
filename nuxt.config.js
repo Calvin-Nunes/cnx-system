@@ -11,15 +11,15 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'cnx-system',
+    title: 'Future Challenge',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'main-head',
-        name: 'cnx-system',
+        name: 'future-challenge',
         content:
-          'CNX System is a Web Application created by Calvin Nunes to test and produce contents using Vue.Js, Nuxt.js and Typescript',
+          'This web page was developed by Calvin Nunes to complete the Challenge asked by Future, using Vue.Js, Nuxt.js and Javascript',
       },
       { name: 'format-detection', content: 'telephone=no' },
     ],
@@ -37,20 +37,13 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
   ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

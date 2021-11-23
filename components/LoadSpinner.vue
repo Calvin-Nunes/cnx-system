@@ -2,7 +2,7 @@
   <icon icon="fas fa-spinner" size="big" v-if="loading" class="load-spinner"></icon>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import LibUtils from 'static/libraries/libUtils'
 

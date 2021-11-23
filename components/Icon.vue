@@ -2,7 +2,7 @@
 	<i :class="getClass"></i>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 
 const Icon = Vue.extend({
@@ -17,7 +17,7 @@ const Icon = Vue.extend({
 	props: ["icon", "size"],
 
 	computed: {
-		getClass(): string {
+		getClass() {
 			this.cssClasses.push(this.icon);
 
 			if (this.size === "big") {

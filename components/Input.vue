@@ -1,14 +1,14 @@
 <template>
 	<div class="input-outer-box">
 		<label v-if="label != null" class="input-label">{{ label }}</label>
-		<div class="input-holder">
+		<div class="input-holder" :style="'height:' + getHeight">
 			<icon v-if="icon != null" :icon="icon" class="input-icon"></icon>
 			<input :value="value" :type="getInputType" :placeholder="placeholder" class="input-base" @input="$emit('input', $event.target.value)" />
 		</div>
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import LibUtils from "static/libraries/libUtils";
 
@@ -19,12 +19,20 @@ const Input = Vue.extend({
 		return {};
 	},
 
-	props: ["placeholder", "value", "valueType", "label", "secure", "icon"],
+	props: {
+		placeholder: { default: "" },
+		value: { default: "" },
+		valueType: { default: "text" },
+		label: { default: "" },
+		secure: { default: false },
+		icon: { default: null },
+		height: { default: 30 },
+	},
 
 	mounted() {},
 
 	computed: {
-		getInputType(): string {
+		getInputType() {
 			if (LibUtils.toBoolean(this.secure) === true) {
 				return "password";
 			} else {
@@ -34,6 +42,10 @@ const Input = Vue.extend({
 			}
 			return "text";
 		},
+
+		getHeight(){
+			return this.height + "px"
+		}
 	},
 });
 export default Input;
@@ -59,7 +71,7 @@ export default Input;
 	border: none;
 	min-width: calc(100% - 30px);
 	flex-grow: 1;
-	height: 30px;
+	height: 100%;
 	margin: 0;
 	transition: 0.3s all ease-out;
 	padding: 0 3px;
@@ -68,7 +80,7 @@ export default Input;
 .input-icon {
 	min-width: 30px;
 	max-width: 30px;
-	height: 30px;
+	height: 100%;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;

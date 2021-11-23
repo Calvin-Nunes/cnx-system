@@ -18,7 +18,7 @@
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /*
@@ -99,9 +99,27 @@ PAGES STRUCTURE STYLES
      object-fit: contain;
 }
 
+.page-title {
+  font-size: 24px;
+  color: var(--system-primary-color);
+  width: 100%;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.page-description {
+  font-size: 18px;
+  color: var(--color-soft-text);
+  width: 100%;
+  text-align: center;
+}
+
+/*
+GLOBAL REUSEABLE STYLES
+*/
 .banner-box {
   width: 100%;
-  max-height: 320px;
+  max-height: 200px;
   text-align: center;
   margin: 10px auto;
   padding: 2px;
@@ -109,7 +127,7 @@ PAGES STRUCTURE STYLES
 
 .banner-box img {
   width: 100%;
-  max-width: 380px;
+  max-width: 200px;
   height: auto;
   -o-object-fit: contain;
      object-fit: contain;
@@ -129,24 +147,6 @@ PAGES STRUCTURE STYLES
           align-items: center;
 }
 
-.page-title {
-  font-size: 24px;
-  color: var(--system-primary-color);
-  width: 100%;
-  text-align: center;
-  margin: 8px 0;
-}
-
-.page-description {
-  font-size: 18px;
-  color: var(--color-soft-text);
-  width: 100%;
-  text-align: center;
-}
-
-/*
-GLOBAL REUSEABLE STYLES
-*/
 .padded-content {
   padding: 5px;
 }
@@ -168,5 +168,21 @@ GLOBAL REUSEABLE STYLES
   text-align: center;
   border-radius: 2px;
   border: 1px solid var(--system-primary-color-dark);
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 767px) {
+  .banner-box img {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    -o-object-fit: contain;
+       object-fit: contain;
+  }
 }
 /*# sourceMappingURL=core.css.map */
