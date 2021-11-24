@@ -1,6 +1,6 @@
 <template>
 	<button :class="buttonClass" @click="OnTapButton">
-		<span v-if="route == null || isDisabled === true">{{ caption }}</span>
+		<span v-if="route == null || disabled === true">{{ caption }}</span>
 		<nuxt-link v-else :to="route">{{ caption }}</nuxt-link>
 	</button>
 </template>
@@ -21,12 +21,16 @@ const Button = Vue.extend({
 	},
 
 	mounted() {
-		if (this.isDisabled) {
-			this.cssClasses.push("disabled");
-		}
-
+		debugger;
 		if (LibUtils.toDecimal(this.fontSize) > 0) {
 			this.$el.children[0].style.fontSize = this.fontSize + "px";
+		}
+	},
+
+	updated() {
+		this.isDisabled = this.disabled;
+		if (this.isDisabled && this.cssClasses.includes("disabled") === false) {
+			this.cssClasses.push("disabled");
 		}
 	},
 

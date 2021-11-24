@@ -140,9 +140,10 @@ GLOBAL REUSEABLE STYLES
 }
 
 .disabled {
-	filter: grayscale(0.75);
+	filter: grayscale(0.5);
 	pointer-events: none;
 	user-select: all;
+	cursor: not-allowed;
 }
 
 .block-button {
@@ -160,7 +161,39 @@ GLOBAL REUSEABLE STYLES
 	text-overflow: ellipsis;
 }
 
-.pagination-box{
+.page-header {
+	margin: 5px auto;
+	text-align: center;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+	padding: 10px 20%;
+	background-color: rgba(0, 0, 0, 0.03);
+}
+
+.page-header .header-top-holder {
+	display: flex;
+	align-items: center;
+}
+
+.page-header .page-title {
+	display: inline-flex;
+	flex-grow: 1;
+	margin: 12px auto;
+	font-size: 36px;
+}
+
+.page-header .page-logo {
+	display: inline-flex;
+	flex-grow: 0;
+	width: 128px;
+	height: auto;
+	opacity: 0.85;
+}
+
+.page-subtitle {
+	text-align: center;
+}
+
+.pagination-box {
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
@@ -177,4 +210,9 @@ GLOBAL REUSEABLE STYLES
 		height: auto;
 		object-fit: contain;
 	}
+}
+
+@keyframes show-item {
+	from{}
+	to{}
 }

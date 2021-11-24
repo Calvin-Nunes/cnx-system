@@ -1,8 +1,8 @@
 <template>
-	<div class="page-wrapper" :class="!$store.state.showPageFooter ? 'no-footer' : ''">
+	<div class="page-wrapper">
 		<navbar></navbar>
 		<Nuxt />
-		<bottom v-if="$store.state.showPageFooter"></bottom>
+		<bottom></bottom>
 	</div>
 </template>
 

@@ -16,9 +16,10 @@
 				</div>
 			</div>
 		</section>
-		<section>
+		<section ref="section_meals">
 			<h4 class="page-subtitle">Receitas</h4>
 			<div class="meals-holder">
+				<load-spinner v-if="loadingData" :loading="loadingData"></load-spinner>
 				<div v-for="receita of receitasPaginacao" :key="receita.idMeal" class="meal-row">
 					<div class="meal-image-holder">
 						<img :src="receita.strMealThumb" :alt="receita.strMeal" />
@@ -27,9 +28,9 @@
 				</div>
 			</div>
 			<div class="pagination-box">
-				<c-button caption="< Anterior" theme="light" :disabled="paginacaoPaginaAtual != 0" :onTap="recuarPaginacao"> </c-button>
-				<p>{{ paginacaoPaginaAtual + 1 }} / {{ paginacaoTotalPaginas }}</p>
-				<c-button caption="Próximo >" theme="light" :disabled="paginacaoPaginaAtual != paginacaoTotalPaginas" :onTap="avancarPaginacao"> </c-button>
+				<c-button caption="< Anterior" theme="light" :disabled="paginacaoPaginaAtual <= 1" :onTap="recuarPaginacao"> </c-button>
+				<p>{{ paginacaoPaginaAtual }} / {{ paginacaoTotalPaginas }}</p>
+				<c-button caption="Próximo >" theme="light" :disabled="paginacaoPaginaAtual >= paginacaoTotalPaginas" :onTap="avancarPaginacao"> </c-button>
 			</div>
 		</section>
 	</div>
@@ -50,13 +51,13 @@ export default Vue.extend({
 			meals: [],
 			receitasPaginacao: [],
 			paginacaoExibicaoLimite: 25,
-			paginacaoPaginaAtual: 0,
-			paginacaoTotalPaginas: 0,
+			paginacaoPaginaAtual: 1,
+			paginacaoTotalPaginas: 1,
+			loadingData: false,
 		};
 	},
 
 	created() {
-		this.$store.dispatch("tooglePageFooter", true);
 		let queryParams = this.$route.query;
 		if (queryParams != null) {
 			this.categoria = queryParams.categoria || "";
@@ -76,20 +77,25 @@ export default Vue.extend({
 				const apiHelper = new ApiHelper("1");
 				let mealsEndpoint = apiHelper.Endpoints.category;
 				let mealsUrl = apiHelper.buildRequestUrl(mealsEndpoint, this.categoria);
-				console.log(mealsUrl);
+
 				if (LibUtils.isFilled(mealsUrl)) {
+					this.loadingData = true;
 					axios
 						.get(mealsUrl)
 						.then(
 							function (response) {
+								this.loadingData = false;
 								this.verifyData(response.data);
 							}.bind(this)
 						)
-						.catch(function (error) {
-							let errorMsg = "Erro ao buscar dados na API: " + error;
-							alert(errorMsg);
-							console.error(errorMsg);
-						});
+						.catch(
+							function (error) {
+								this.loadingData = false;
+								let errorMsg = "Erro ao buscar dados na API: " + error;
+								alert(errorMsg);
+								console.error(errorMsg);
+							}.bind(this)
+						);
 				}
 			}
 		},
@@ -113,13 +119,23 @@ export default Vue.extend({
 			this.paginacaoTotalPaginas = Math.ceil(this.meals.length / this.paginacaoExibicaoLimite);
 
 			this.receitasPaginacao = [];
-			let i = this.paginacaoPaginaAtual * this.paginacaoExibicaoLimite;
-debugger
-			for (; i < this.paginacaoExibicaoLimite; i++) {
+			let i = (this.paginacaoPaginaAtual - 1) * this.paginacaoExibicaoLimite;
+
+			let limite = i > 0 ? i * 2 : this.paginacaoExibicaoLimite;
+			if (limite >= this.meals.length) {
+				limite = this.meals.length;
+			}
+
+			for (i; i < limite; i++) {
 				let receita = this.meals[i];
 				if (LibUtils.isFilled(receita)) {
 					this.receitasPaginacao.push(receita);
 				}
+			}
+
+			let scrollTo = this.$refs.section_meals;
+			if (scrollTo != null) {
+				scrollTo.scrollIntoView({ behavior: "smooth" });
 			}
 		},
 
@@ -128,17 +144,16 @@ debugger
 		| ---- */
 		avancarPaginacao: function () {
 			this.paginacaoPaginaAtual++;
-			debugger;
-			if (this.paginacaoPaginaAtual + 1 > this.paginacaoTotalPaginas) {
-				this.paginacaoPaginaAtual = this.paginacaoTotalPaginas - 1;
+			if (this.paginacaoPaginaAtual > this.paginacaoTotalPaginas) {
+				this.paginacaoPaginaAtual = this.paginacaoTotalPaginas;
 			}
 			this.paginarDados();
 		},
 
 		recuarPaginacao: function () {
 			this.paginacaoPaginaAtual--;
-			if (this.paginacaoPaginaAtual < 0) {
-				this.paginacaoPaginaAtual = 0;
+			if (this.paginacaoPaginaAtual < 1) {
+				this.paginacaoPaginaAtual = 1;
 			}
 			this.paginarDados();
 		},
@@ -147,38 +162,6 @@ debugger
 </script>
 
 <style lang="scss" scoped>
-.page-header {
-	margin: 5px auto;
-	text-align: center;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.08);
-	padding: 10px 20%;
-	background-color: rgba(0, 0, 0, 0.03);
-}
-
-.page-header .header-top-holder {
-	display: flex;
-	align-items: center;
-}
-
-.page-header .page-title {
-	display: inline-flex;
-	flex-grow: 1;
-	margin: 12px auto;
-	font-size: 36px;
-}
-
-.page-header .page-logo {
-	display: inline-flex;
-	flex-grow: 0;
-	width: 128px;
-	height: auto;
-	opacity: 0.85;
-}
-
-.page-subtitle {
-	text-align: center;
-}
-
 .input-pesquisa-box {
 	width: 100%;
 	margin: 8px auto;
@@ -194,7 +177,6 @@ debugger
 	background: linear-gradient(135deg, #ecf0ee 0%, #f5f5f5 40%, #e2e7e4 90%);
 	border-radius: 5px;
 	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.15);
-	transition: 0.4s height ease-in;
 }
 
 .meal-row {

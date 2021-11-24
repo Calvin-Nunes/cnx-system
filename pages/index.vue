@@ -20,6 +20,7 @@
 		</section>
 		<section>
 			<div class="categories-holder">
+				<load-spinner v-if="loadingData" :loading="loadingData"></load-spinner>
 				<a v-for="category of categories" :key="category.idCategory" class="category-card" @click="goToMealCategory(category)">
 					<div class="category-image-holder">
 						<img :src="category.strCategoryThumb" :alt="category.strCategory" />
@@ -35,23 +36,29 @@
 import Vue from "vue";
 import ApiHelper from "static/libraries/ApiHelper";
 import LibUtils from "static/libraries/libUtils";
+import LoadSpinner from "@/components/LoadSpinner.vue";
 import axios from "axios";
 
 export default Vue.extend({
+	components: { "load-spinner": LoadSpinner },
+
 	data: () => {
 		return {
 			txtPesquisaIngrediente: "",
 			categories: [],
+			loadingData: false,
 		};
 	},
 
 	created() {
-		this.$store.dispatch("tooglePageFooter", true);
-
 		this.getCategories();
 	},
 
 	methods: {
+		/*
+		| função: goToMealCategory
+		| Listener de click para categorias, ao clicar irá abrir a page das receitas da categoria selecionada
+		| ---- */
 		goToMealCategory: function (category) {
 			if (LibUtils.isFilled(category)) {
 				this.$router.push({
@@ -63,28 +70,41 @@ export default Vue.extend({
 				});
 			}
 		},
-
+		/*
+		| função: getCategories
+		| Utilizando a classe auxiliar ApiHelper, cria a URL, faz uma chamada GET para API buscar todas categorias do MealDB
+		| ---- */
 		getCategories: function () {
 			const apiHelper = new ApiHelper("1");
 			let categoriesEndpoint = apiHelper.Endpoints.categories;
 			let categoriesUrl = apiHelper.buildRequestUrl(categoriesEndpoint);
+
+			this.loadingData = true;
 
 			if (LibUtils.isFilled(categoriesUrl)) {
 				axios
 					.get(categoriesUrl)
 					.then(
 						function (response) {
+							this.loadingData = false;
 							this.verifyCategoriesData(response.data);
 						}.bind(this)
 					)
-					.catch(function (error) {
-						let errorMsg = "Erro ao buscar dados na API: " + error;
-						alert(errorMsg);
-						console.error(errorMsg);
-					});
+					.catch(
+						function (error) {
+							this.loadingData = false;
+							let errorMsg = "Erro ao buscar dados na API: " + error;
+							alert(errorMsg);
+							console.error(errorMsg);
+						}.bind(this)
+					);
 			}
 		},
 
+		/*
+		| função: verifyCategoriesData
+		| Verifica integridade dos dados recebidos e caso ok, atribui à propriedade
+		| ---- */
 		verifyCategoriesData: function (data) {
 			if (LibUtils.isFilled(data)) {
 				this.categories = data.categories || [];
