@@ -7,6 +7,7 @@ class ApiHelper {
 	Endpoints = {
 		categories: "/categories.php",
 		mealDetail: "/lookup.php?i=",
+		category: "/filter.php?c=",
 		searchIngredient: "/filter.php?i=",
 	};
 

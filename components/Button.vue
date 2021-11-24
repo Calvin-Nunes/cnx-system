@@ -1,8 +1,8 @@
 <template>
-	<div :class="buttonClass" @click="OnTapButton">
+	<button :class="buttonClass" @click="OnTapButton">
 		<span v-if="route == null || isDisabled === true">{{ caption }}</span>
 		<nuxt-link v-else :to="route">{{ caption }}</nuxt-link>
-	</div>
+	</button>
 </template>
 
 <script>

@@ -3,7 +3,13 @@
 		<label v-if="label != null" class="input-label">{{ label }}</label>
 		<div class="input-holder" :style="'height:' + getHeight">
 			<icon v-if="icon != null" :icon="icon" class="input-icon"></icon>
-			<input :value="value" :type="getInputType" :placeholder="placeholder" class="input-base" @input="$emit('input', $event.target.value)" />
+			<input
+				:value="value"
+				:type="getInputType"
+				:placeholder="placeholder"
+				:style="getInputStyle"
+				class="input-base"
+				@input="$emit('input', $event.target.value)" />
 		</div>
 	</div>
 </template>
@@ -27,9 +33,8 @@ const Input = Vue.extend({
 		secure: { default: false },
 		icon: { default: null },
 		height: { default: 30 },
+		fontSize: { default: 16 },
 	},
-
-	mounted() {},
 
 	computed: {
 		getInputType() {
@@ -43,9 +48,13 @@ const Input = Vue.extend({
 			return "text";
 		},
 
-		getHeight(){
-			return this.height + "px"
-		}
+		getHeight() {
+			return this.height + "px";
+		},
+
+		getInputStyle() {
+			return `font-size: ${this.fontSize}px`;
+		},
 	},
 });
 export default Input;
@@ -69,7 +78,7 @@ export default Input;
 	align-items: center;
 	outline: none;
 	border: none;
-	min-width: calc(100% - 30px);
+	min-width: calc(100% - 35px);
 	flex-grow: 1;
 	height: 100%;
 	margin: 0;
@@ -78,8 +87,8 @@ export default Input;
 }
 
 .input-icon {
-	min-width: 30px;
-	max-width: 30px;
+	min-width: 35px;
+	max-width: 35px;
 	height: 100%;
 	display: inline-flex;
 	align-items: center;

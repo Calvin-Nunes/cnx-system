@@ -2,24 +2,30 @@
 	<div class="page-content">
 		<section>
 			<div class="banner-box">
-				<img src="~/assets/images/icon.png" alt="banner" height="380px" />
+				<img src="~/assets/images/banner.svg" alt="banner" height="250" />
 			</div>
+		</section>
+		<section>
 			<div class="description-card">
-				<h1>MealDB</h1>
 				<div class="input-pesquisa-box">
-					<cnx-input v-model="txtPesquisaIngrediente" placeholder="Qual ingrediente você mais gosta?" icon="fas fa-search" height="50"></cnx-input>
+					<c-input
+						v-model="txtPesquisaIngrediente"
+						placeholder="Qual ingrediente você mais gosta?"
+						icon="fas fa-search"
+						height="50"
+						fontSize="20"></c-input>
 				</div>
-				<p>Olá, selecione uma categoria de refeição que mais lhe agrade</p>
+				<h3>Categorias</h3>
 			</div>
 		</section>
 		<section>
 			<div class="categories-holder">
-				<div v-for="category of categories" :key="category.idCategory" class="category-card">
+				<a v-for="category of categories" :key="category.idCategory" class="category-card" @click="goToMealCategory(category)">
 					<div class="category-image-holder">
 						<img :src="category.strCategoryThumb" :alt="category.strCategory" />
 					</div>
 					<h4 class="category-name">{{ category.strCategory }}</h4>
-				</div>
+				</a>
 			</div>
 		</section>
 	</div>
@@ -46,6 +52,18 @@ export default Vue.extend({
 	},
 
 	methods: {
+		goToMealCategory: function (category) {
+			if (LibUtils.isFilled(category)) {
+				this.$router.push({
+					path: "receitas-categoria",
+					query: {
+						categoria: category.strCategory,
+						id: category.idCategory,
+					},
+				});
+			}
+		},
+
 		getCategories: function () {
 			const apiHelper = new ApiHelper("1");
 			let categoriesEndpoint = apiHelper.Endpoints.categories;
@@ -70,7 +88,6 @@ export default Vue.extend({
 		verifyCategoriesData: function (data) {
 			if (LibUtils.isFilled(data)) {
 				this.categories = data.categories || [];
-				console.log(this.categories);
 			}
 		},
 	},
@@ -89,24 +106,29 @@ export default Vue.extend({
 
 .input-pesquisa-box {
 	width: 480px;
-	margin: 8px auto;
+	margin: 15px auto;
 }
 
 .categories-holder {
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap;
+	margin: 0 5% 10px 5%;
+	padding: 10px;
+	background: linear-gradient(135deg, #ecf0ee 0%, #f5f5f5 40%, #e2e7e4 90%);
+	border-radius: 5px;
+	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .category-card {
-	width: calc(20% - 10px);
+	width: calc(20% - 5px);
 	display: inline-flex;
 	flex-direction: column;
 	border-radius: 4px;
 	border: 1px solid rgb(210, 210, 210);
-	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.15);
 	transition: 0.3s all ease-in;
 	align-items: center;
+	background-color: #f5f5f5;
 }
 
 .category-card:hover {
@@ -115,7 +137,7 @@ export default Vue.extend({
 	cursor: pointer;
 }
 
-.category-card:hover .category-name{
+.category-card:hover .category-name {
 	color: #000000;
 }
 
@@ -142,7 +164,21 @@ export default Vue.extend({
 	color: #222222;
 }
 
+@media (max-width: 991px) {
+	.category-card {
+		width: calc(25% - 5px);
+	}
+}
+
 @media (max-width: 767px) {
+	.categories-holder {
+		padding: 5px;
+	}
+
+	.category-card {
+		width: calc(33.33% - 5px);
+	}
+
 	.input-pesquisa-box {
 		width: 90%;
 		margin: 8px auto;

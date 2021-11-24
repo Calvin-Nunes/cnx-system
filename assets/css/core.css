@@ -15,10 +15,15 @@
   --soft-background-color: rgba(0, 0, 0, 0.05);
 }
 
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url(~assets/webfonts/Montserrat-Regular.ttf) format("truetype");
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 /*
@@ -119,16 +124,16 @@ GLOBAL REUSEABLE STYLES
 */
 .banner-box {
   width: 100%;
-  max-height: 200px;
-  text-align: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
   margin: 10px auto;
-  padding: 2px;
+  padding: 0 2%;
 }
 
 .banner-box img {
   width: 100%;
-  max-width: 200px;
-  height: auto;
+  height: 120px;
   -o-object-fit: contain;
      object-fit: contain;
 }
@@ -174,6 +179,27 @@ GLOBAL REUSEABLE STYLES
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.pagination-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 5px;
+  width: 100%;
+  margin: 2px auto;
+}
+
+.pagination-button {
+  padding: 5px;
 }
 
 @media (max-width: 767px) {

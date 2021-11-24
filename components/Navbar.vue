@@ -4,6 +4,7 @@
 			<nuxt-link to="/" class="logo-link">
 				<img id="navbar-logo" src="~/assets/images/logo-white.png" alt="Logo" />
 			</nuxt-link>
+			<span>MealDB</span>
 		</div>
 		<div class="nav-right">
 			<p>Future - Desafio MealDB API</p>
@@ -46,19 +47,19 @@ nav {
 .nav-left {
 	display: inline-flex;
 	justify-self: flex-start;
+	align-items: center;
 	max-width: 35%;
 	padding: 1px 4px;
 }
 
 .nav-left a.logo-link {
 	margin: 0 4px;
-	width: 36px;
-	height: 36px;
 }
 
 .nav-left #navbar-logo {
-	width: 100%;
-	height: 100%;
+	width: 36px;
+	height: 36px;
+	margin: 0 4px;
 }
 
 .nav-right {
@@ -68,5 +69,4 @@ nav {
 	padding: 1px 4px;
 	color: #fff;
 }
-
 </style>
