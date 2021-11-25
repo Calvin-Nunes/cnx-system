@@ -1,14 +1,12 @@
 <template>
-	<div class="page-wrapper">
+	<div class="page-wrapper" :class="!$store.state.showPageFooter ? 'no-footer' : ''">
 		<navbar></navbar>
-		<transition name="fade" mode="out-in">
-			<Nuxt />
-		</transition>
-		<bottom></bottom>
+		<Nuxt />
+		<bottom v-if="$store.state.showPageFooter"></bottom>
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import Footer from "@/components/Footer.vue";
 
@@ -17,14 +15,4 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.15s ease-in;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-</style>
+<style lang="scss" scoped></style>

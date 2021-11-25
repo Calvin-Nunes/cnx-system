@@ -1,21 +1,21 @@
 <template>
 	<footer class="page-footer">
 		<div class="footer-column footer-left">
-			<p>Developer Email: calvin_nunes13@hotmail.com</p>
-			<p>Developer Phone: +55 51 98402-9317</p>
-		</div>
-		<div class="footer-column footer-center">MealDB Challenge</div>
-		<div class="footer-column footer-right">
 			<ul class="footer-links">
 				<li v-for="(link, index) in footerLinks" :key="index">
-					<a :href="link.path">{{ link.description }}</a>
+					<nuxt-link :to="link.path">{{ link.description }}</nuxt-link>
 				</li>
 			</ul>
+		</div>
+		<div class="footer-column footer-center">CNX System</div>
+		<div class="footer-column footer-right">
+			<p>Developer Email: calvin_nunes13@hotmail.com</p>
+			<p>Developer Phone: +55 51 98402-9317</p>
 		</div>
 	</footer>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import LibUtils from "static/libraries/libUtils";
 
@@ -25,9 +25,9 @@ const Navbar = Vue.extend({
 	data() {
 		return {
 			footerLinks: [
-				{ description: "LinkedIn", path: "https://www.linkedin.com/in/calvinnunes13/" },
-				{ description: "GitHub", path: "https://github.com/Calvin-Nunes" },
-				{ description: "StackOverflow", path: "https://stackoverflow.com/users/8691276/calvin-nunes" },
+				{ description: "Register", path: "register" },
+				{ description: "Log In", path: "login" },
+				{ description: "About Us", path: "about-us" },
 			],
 		};
 	},

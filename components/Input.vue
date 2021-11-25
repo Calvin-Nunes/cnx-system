@@ -1,20 +1,14 @@
 <template>
 	<div class="input-outer-box">
 		<label v-if="label != null" class="input-label">{{ label }}</label>
-		<div class="input-holder" :style="'height:' + getHeight">
+		<div class="input-holder">
 			<icon v-if="icon != null" :icon="icon" class="input-icon"></icon>
-			<input
-				:value="value"
-				:type="getInputType"
-				:placeholder="placeholder"
-				:style="getInputStyle"
-				class="input-base"
-				@input="$emit('input', $event.target.value)" />
+			<input :value="value" :type="getInputType" :placeholder="placeholder" class="input-base" @input="$emit('input', $event.target.value)" />
 		</div>
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import LibUtils from "static/libraries/libUtils";
 
@@ -25,19 +19,12 @@ const Input = Vue.extend({
 		return {};
 	},
 
-	props: {
-		placeholder: { default: "" },
-		value: { default: "" },
-		valueType: { default: "text" },
-		label: { default: "" },
-		secure: { default: false },
-		icon: { default: null },
-		height: { default: 30 },
-		fontSize: { default: 16 },
-	},
+	props: ["placeholder", "value", "valueType", "label", "secure", "icon"],
+
+	mounted() {},
 
 	computed: {
-		getInputType() {
+		getInputType(): string {
 			if (LibUtils.toBoolean(this.secure) === true) {
 				return "password";
 			} else {
@@ -46,14 +33,6 @@ const Input = Vue.extend({
 				}
 			}
 			return "text";
-		},
-
-		getHeight() {
-			return this.height + "px";
-		},
-
-		getInputStyle() {
-			return `font-size: ${this.fontSize}px`;
 		},
 	},
 });
@@ -78,18 +57,18 @@ export default Input;
 	align-items: center;
 	outline: none;
 	border: none;
-	min-width: calc(100% - 35px);
+	min-width: calc(100% - 30px);
 	flex-grow: 1;
-	height: 100%;
+	height: 30px;
 	margin: 0;
 	transition: 0.3s all ease-out;
 	padding: 0 3px;
 }
 
 .input-icon {
-	min-width: 35px;
-	max-width: 35px;
-	height: 100%;
+	min-width: 30px;
+	max-width: 30px;
+	height: 30px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
