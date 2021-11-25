@@ -157,14 +157,14 @@ GLOBAL REUSEABLE STYLES
 }
 
 .disabled {
-  -webkit-filter: grayscale(0.5);
-          filter: grayscale(0.5);
-  pointer-events: none;
+  -webkit-filter: grayscale(0.9) !important;
+          filter: grayscale(0.9) !important;
+  background-color: rgba(0, 0, 0, 0.12) !important;
+  pointer-events: none !important;
   -webkit-user-select: all;
      -moz-user-select: all;
       -ms-user-select: all;
           user-select: all;
-  cursor: not-allowed;
 }
 
 .block-button {
@@ -220,6 +220,21 @@ GLOBAL REUSEABLE STYLES
   width: 128px;
   height: auto;
   opacity: 0.85;
+}
+
+.page-header .return-button {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  font-size: 13px;
+  padding: 5px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+}
+
+.page-header .return-button:hover {
+  cursor: pointer;
+  border-color: #777777;
 }
 
 .page-subtitle {

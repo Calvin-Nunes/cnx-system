@@ -140,10 +140,10 @@ GLOBAL REUSEABLE STYLES
 }
 
 .disabled {
-	filter: grayscale(0.5);
-	pointer-events: none;
+	filter: grayscale(0.9) !important;
+	background-color: rgba(0, 0, 0, 0.12) !important;
+	pointer-events: none !important;
 	user-select: all;
-	cursor: not-allowed;
 }
 
 .block-button {
@@ -189,6 +189,21 @@ GLOBAL REUSEABLE STYLES
 	opacity: 0.85;
 }
 
+.page-header .return-button{
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	font-size: 13px;
+	padding: 5px;
+	border: 1px solid #aaaaaa;
+	border-radius: 4px;
+}
+
+.page-header .return-button:hover{
+	cursor: pointer;
+	border-color: #777777;
+}
+
 .page-subtitle {
 	text-align: center;
 }
@@ -213,6 +228,8 @@ GLOBAL REUSEABLE STYLES
 }
 
 @keyframes show-item {
-	from{}
-	to{}
+	from {
+	}
+	to {
+	}
 }

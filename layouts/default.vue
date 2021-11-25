@@ -1,7 +1,9 @@
 <template>
 	<div class="page-wrapper">
 		<navbar></navbar>
-		<Nuxt />
+		<transition name="fade" mode="out-in">
+			<Nuxt />
+		</transition>
 		<bottom></bottom>
 	</div>
 </template>
@@ -15,4 +17,14 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.15s ease-in;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+</style>

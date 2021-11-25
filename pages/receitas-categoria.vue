@@ -2,95 +2,102 @@
 	<div class="page-content">
 		<section>
 			<div class="page-header">
+				<a @click="$router.go(-1)" class="return-button">Voltar</a>
 				<div class="header-top-holder">
-					<h1 class="page-title">{{ categoria }}</h1>
+					<h1 class="page-title">{{ categoryName }}</h1>
 					<img src="~/assets/images/icon.png" class="page-logo" />
 				</div>
 				<div class="input-pesquisa-box">
-					<c-input
-						v-model="txtPesquisaIngrediente"
-						placeholder="Qual ingrediente você mais gosta?"
-						icon="fas fa-search"
-						height="50"
-						fontSize="20"></c-input>
+					<c-input v-model="searchText" placeholder="Qual ingrediente você mais gosta?" icon="fas fa-search" height="50" fontSize="20"></c-input>
 				</div>
 			</div>
 		</section>
 		<section ref="section_meals">
 			<h4 class="page-subtitle">Receitas</h4>
 			<div class="meals-holder">
-				<load-spinner v-if="loadingData" :loading="loadingData"></load-spinner>
-				<div v-for="receita of receitasPaginacao" :key="receita.idMeal" class="meal-row">
+				<load-spinner v-if="isFetchingData" :loading="isFetchingData"></load-spinner>
+				<div v-else-if="meals.length > 0" v-for="meal of mealsDisplaying" :key="meal.idMeal" class="meal-row" @click="goToMealDetails(meal)">
 					<div class="meal-image-holder">
-						<img :src="receita.strMealThumb" :alt="receita.strMeal" />
+						<img :src="meal.strMealThumb" :alt="meal.strMeal" />
 					</div>
-					<p class="meal-name">{{ receita.strMeal }}</p>
+					<p class="meal-name">{{ meal.strMeal }}</p>
 				</div>
+				<p v-else>Nenhuma Receita disponível</p>
 			</div>
 			<div class="pagination-box">
-				<c-button caption="< Anterior" theme="light" :disabled="paginacaoPaginaAtual <= 1" :onTap="recuarPaginacao"> </c-button>
-				<p>{{ paginacaoPaginaAtual }} / {{ paginacaoTotalPaginas }}</p>
-				<c-button caption="Próximo >" theme="light" :disabled="paginacaoPaginaAtual >= paginacaoTotalPaginas" :onTap="avancarPaginacao"> </c-button>
+				<c-button caption="< Anterior" theme="light" :disabled="currentPage <= 1" :onTap="recuarPaginacao"> </c-button>
+				<p>{{ currentPage }} / {{ totalPages }}</p>
+				<c-button caption="Próximo >" theme="light" :disabled="currentPage >= totalPages" :onTap="avancarPaginacao"> </c-button>
 			</div>
 		</section>
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import ApiHelper from "static/libraries/ApiHelper";
 import LibUtils from "static/libraries/libUtils";
+import routerHelper from "~/mixins/router-helper";
 import axios from "axios";
+import LoadSpinner from "@/components/LoadSpinner.vue";
 
 export default Vue.extend({
+	components: { "load-spinner": LoadSpinner },
+	mixins: [routerHelper],
 	data: () => {
 		return {
-			categoria: "",
+			categoryName: "",
 			categoryId: 0,
-			txtPesquisaIngrediente: "",
+			searchText: "",
 			meals: [],
-			receitasPaginacao: [],
-			paginacaoExibicaoLimite: 25,
-			paginacaoPaginaAtual: 1,
-			paginacaoTotalPaginas: 1,
-			loadingData: false,
+			mealsDisplaying: [],
+			perPageLimit: 25,
+			currentPage: 1,
+			totalPages: 1,
+			isFetchingData: false,
 		};
 	},
 
 	created() {
 		let queryParams = this.$route.query;
 		if (queryParams != null) {
-			this.categoria = queryParams.categoria || "";
+			this.categoryName = queryParams.category || "";
 			this.categoriaId = LibUtils.toDecimal(queryParams.id);
 		}
 
 		this.getMeals();
 	},
 
+	updated() {
+		if (!this.isFetchingData && this.meals.length == 0) {
+			this.getMeals();
+		}
+	},
+
 	methods: {
 		/*
 		| função: getMeals
-		| Utilizando a classe auxiliar ApiHelper, cria a URL, faz uma chamada GET para API buscando os dados das receitas da categoria
+		| Utilizando a classe auxiliar ApiHelper, cria a URL, faz uma chamada GET para API buscando os dados das meals da category
 		| ---- */
 		getMeals: function () {
-			if (LibUtils.isFilled(this.categoria)) {
+			if (LibUtils.isFilled(this.categoryName)) {
 				const apiHelper = new ApiHelper("1");
 				let mealsEndpoint = apiHelper.Endpoints.category;
-				let mealsUrl = apiHelper.buildRequestUrl(mealsEndpoint, this.categoria);
+				let mealsUrl = apiHelper.buildRequestUrl(mealsEndpoint, this.categoryName);
 
 				if (LibUtils.isFilled(mealsUrl)) {
-					this.loadingData = true;
+					this.isFetchingData = true;
 					axios
 						.get(mealsUrl)
 						.then(
 							function (response) {
-								this.loadingData = false;
+								this.isFetchingData = false;
 								this.verifyData(response.data);
 							}.bind(this)
 						)
 						.catch(
 							function (error) {
-								this.loadingData = false;
+								this.isFetchingData = false;
 								let errorMsg = "Erro ao buscar dados na API: " + error;
 								alert(errorMsg);
 								console.error(errorMsg);
@@ -112,24 +119,38 @@ export default Vue.extend({
 		},
 
 		/*
+		| função: goToMealDetails
+		| Listener de click para meals, ao clicar irá abrir a page de detalhes da meal selecionada
+		| ---- */
+		goToMealDetails: function (meal) {
+			if (LibUtils.isFilled(meal)) {
+				let params = {
+					meal: meal.strMeal,
+					id: meal.idMeal,
+				};
+				this.navigate("receita", params)
+			}
+		},
+
+		/*
 		| função: paginarDados
 		| Corre do ponto inicial ao limite por exibição e coloca no array que será usado para exibição
 		| ---- */
 		paginarDados: function () {
-			this.paginacaoTotalPaginas = Math.ceil(this.meals.length / this.paginacaoExibicaoLimite);
+			this.totalPages = Math.ceil(this.meals.length / this.perPageLimit);
 
-			this.receitasPaginacao = [];
-			let i = (this.paginacaoPaginaAtual - 1) * this.paginacaoExibicaoLimite;
+			this.mealsDisplaying = [];
+			let i = (this.currentPage - 1) * this.perPageLimit;
 
-			let limite = i > 0 ? i * 2 : this.paginacaoExibicaoLimite;
+			let limite = i > 0 ? i * 2 : this.perPageLimit;
 			if (limite >= this.meals.length) {
 				limite = this.meals.length;
 			}
 
 			for (i; i < limite; i++) {
-				let receita = this.meals[i];
-				if (LibUtils.isFilled(receita)) {
-					this.receitasPaginacao.push(receita);
+				let meal = this.meals[i];
+				if (LibUtils.isFilled(meal)) {
+					this.mealsDisplaying.push(meal);
 				}
 			}
 
@@ -143,17 +164,17 @@ export default Vue.extend({
 		| funções relativas à avançar e recuar paginação
 		| ---- */
 		avancarPaginacao: function () {
-			this.paginacaoPaginaAtual++;
-			if (this.paginacaoPaginaAtual > this.paginacaoTotalPaginas) {
-				this.paginacaoPaginaAtual = this.paginacaoTotalPaginas;
+			this.currentPage++;
+			if (this.currentPage > this.totalPages) {
+				this.currentPage = this.totalPages;
 			}
 			this.paginarDados();
 		},
 
 		recuarPaginacao: function () {
-			this.paginacaoPaginaAtual--;
-			if (this.paginacaoPaginaAtual < 1) {
-				this.paginacaoPaginaAtual = 1;
+			this.currentPage--;
+			if (this.currentPage < 1) {
+				this.currentPage = 1;
 			}
 			this.paginarDados();
 		},

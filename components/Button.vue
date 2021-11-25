@@ -1,5 +1,5 @@
 <template>
-	<button :class="buttonClass" @click="OnTapButton">
+	<button :class="buttonClass" @click="onTapButton">
 		<span v-if="route == null || disabled === true">{{ caption }}</span>
 		<nuxt-link v-else :to="route">{{ caption }}</nuxt-link>
 	</button>
@@ -19,25 +19,34 @@ const Button = Vue.extend({
 			isDisabled: this.disabled || false,
 		};
 	},
+	
+	created() {
+		this.setDisabledStatus();
+	},
 
 	mounted() {
-		debugger;
 		if (LibUtils.toDecimal(this.fontSize) > 0) {
 			this.$el.children[0].style.fontSize = this.fontSize + "px";
 		}
 	},
 
-	updated() {
-		this.isDisabled = this.disabled;
-		if (this.isDisabled && this.cssClasses.includes("disabled") === false) {
-			this.cssClasses.push("disabled");
-		}
-	},
-
 	methods: {
-		OnTapButton: function () {
+		onTapButton: function () {
 			if (this.onTap != null && this.isDisabled === false) {
 				this.onTap(this);
+			}
+		},
+
+		setDisabledStatus: function () {
+			this.isDisabled = this.disabled;
+
+			if (this.isDisabled && this.cssClasses.includes("disabled") === false) {
+				this.cssClasses.push("disabled");
+			} else if (!this.isDisabled) {
+				let idx = this.cssClasses.indexOf("disabled");
+				if (idx > -1) {
+					this.cssClasses.splice(idx, 1);
+				}
 			}
 		},
 	},
@@ -68,6 +77,12 @@ const Button = Vue.extend({
 
 			let classes = this.cssClasses.join(" ");
 			return classes;
+		},
+	},
+
+	watch: {
+		disabled: function () {
+			this.setDisabledStatus();
 		},
 	},
 });

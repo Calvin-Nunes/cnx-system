@@ -5,7 +5,6 @@ export default {
   ssr: false,
 
   alias: {
-    '@interfaces': resolve(__dirname, './interfaces'),
     '@components': resolve(__dirname, './components'),
   },
 
@@ -36,9 +35,7 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    
-  ],
+  buildModules: [ ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

@@ -9,7 +9,7 @@
 			<div class="description-card">
 				<div class="input-pesquisa-box">
 					<c-input
-						v-model="txtPesquisaIngrediente"
+						v-model="searchText"
 						placeholder="Qual ingrediente você mais gosta?"
 						icon="fas fa-search"
 						height="50"
@@ -20,7 +20,7 @@
 		</section>
 		<section>
 			<div class="categories-holder">
-				<load-spinner v-if="loadingData" :loading="loadingData"></load-spinner>
+				<load-spinner v-if="isFetchingData" :loading="isFetchingData"></load-spinner>
 				<a v-for="category of categories" :key="category.idCategory" class="category-card" @click="goToMealCategory(category)">
 					<div class="category-image-holder">
 						<img :src="category.strCategoryThumb" :alt="category.strCategory" />
@@ -32,21 +32,23 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import ApiHelper from "static/libraries/ApiHelper";
 import LibUtils from "static/libraries/libUtils";
-import LoadSpinner from "@/components/LoadSpinner.vue";
+import routerHelper from "~/mixins/router-helper";
 import axios from "axios";
+import LoadSpinner from "@/components/LoadSpinner.vue";
 
 export default Vue.extend({
 	components: { "load-spinner": LoadSpinner },
+	mixins: [routerHelper],
 
 	data: () => {
 		return {
-			txtPesquisaIngrediente: "",
+			searchText: "",
 			categories: [],
-			loadingData: false,
+			isFetchingData: false,
 		};
 	},
 
@@ -61,13 +63,11 @@ export default Vue.extend({
 		| ---- */
 		goToMealCategory: function (category) {
 			if (LibUtils.isFilled(category)) {
-				this.$router.push({
-					path: "receitas-categoria",
-					query: {
-						categoria: category.strCategory,
-						id: category.idCategory,
-					},
-				});
+				let params = {
+					category: category.strCategory,
+					id: category.idCategory,
+				};
+				this.navigate("receitas-categoria", params);
 			}
 		},
 		/*
@@ -79,20 +79,20 @@ export default Vue.extend({
 			let categoriesEndpoint = apiHelper.Endpoints.categories;
 			let categoriesUrl = apiHelper.buildRequestUrl(categoriesEndpoint);
 
-			this.loadingData = true;
+			this.isFetchingData = true;
 
 			if (LibUtils.isFilled(categoriesUrl)) {
 				axios
 					.get(categoriesUrl)
 					.then(
 						function (response) {
-							this.loadingData = false;
+							this.isFetchingData = false;
 							this.verifyCategoriesData(response.data);
 						}.bind(this)
 					)
 					.catch(
 						function (error) {
-							this.loadingData = false;
+							this.isFetchingData = false;
 							let errorMsg = "Erro ao buscar dados na API: " + error;
 							alert(errorMsg);
 							console.error(errorMsg);

@@ -2,44 +2,64 @@
 	<div class="page-content">
 		<section>
 			<div class="page-header">
-				<div class="header-top-holder">
-					<h1 class="page-title">{{ receita }}</h1>
-					<img src="~/assets/images/icon.png" class="page-logo" />
-				</div>				
+				<a @click="$router.go(-1)" class="return-button">Voltar</a>
+				<div class="header-left">
+					<h1 class="page-title meal-name">{{ mealName }}</h1>
+					<h4 class="meal-category" @click="returnToCategory">{{ meal.strCategory || "" }}</h4>
+				</div>
+				<div class="header-right">
+					<img v-if="meal != null && meal.strMealThumb != null" :src="meal.strMealThumb" class="meal-photo" width="256px" />
+				</div>
 			</div>
 		</section>
 		<section>
-			<div class="meal-holder">
-				
-			</div>			
+			<div class="meal-holder" v-if="meal != null && meal.idMeal > 0">
+				<h3 class="meal-section-title">Ingredientes</h3>
+				<div class="meal-section">
+					<ul class="ingredients-list">
+						<li v-for="(item, index) in mealIngredients" :key="index">{{ item.measure }} - {{ item.name }}</li>
+					</ul>
+				</div>
+				<h3 class="meal-section-title">Modo de Preparo</h3>
+				<div class="meal-section">
+					<p class="prepare-instructions">{{ meal.strInstructions }}</p>
+				</div>
+
+				<div class="tags-holder">
+					<span v-for="(tag, index) in meal.strTags.split(',')" :key="index">{{ tag }}</span>
+				</div>
+
+				<!-- <div v-if="meal.strYoutube && meal.strYoutube.length > 0" class="video-holder">
+					<iframe title="Video" height="300" width="300" :src="meal.strYoutube"></iframe>
+				</div> -->
+			</div>
 		</section>
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import ApiHelper from "static/libraries/ApiHelper";
 import LibUtils from "static/libraries/libUtils";
+import routerHelper from "~/mixins/router-helper";
 import axios from "axios";
+import LoadSpinner from "@/components/LoadSpinner.vue";
 
 export default Vue.extend({
+	mixins: [routerHelper],
 	data: () => {
 		return {
-			categoria: "",
-			categoryId: 0,
-			txtPesquisaIngrediente: "",
-			meals: [],
-			receitasPaginacao: [],
-			paginacaoExibicaoLimite: 25,
-			paginacaoPaginaAtual: 0,
-			paginacaoTotalPaginas: 0,
+			mealName: "",
+			mealId: 0,
+			meal: {},
+			mealIngredients: [],
 		};
 	},
 
 	created() {
 		let queryParams = this.$route.query;
 		if (queryParams != null) {
-			this.meal = queryParams.receita || "";
+			this.mealName = queryParams.meal || "";
 			this.mealId = LibUtils.toDecimal(queryParams.id);
 		}
 
@@ -48,15 +68,37 @@ export default Vue.extend({
 
 	methods: {
 		/*
+		| função: normalizeIngredients
+		| Se houver uma receita, ajusta os dados referentes a ingredientes que vem da API por propriedade em uma lista organizada de objetos
+		| ---- */
+		normalizeIngredients: function () {
+			this.mealIngredients = [];
+			if (this.meal != null && this.meal.idMeal > 0) {
+				let maxIngredientesFromApi = 20;
+				for (let i = 1; i <= maxIngredientesFromApi; i++) {
+					let ingredient = this.meal["strIngredient" + i];
+					if (LibUtils.isFilled(ingredient)) {
+						let measure = this.meal["strMeasure" + i];
+						let obj = {
+							name: ingredient,
+							measure: measure,
+						};
+						this.mealIngredients.push(obj);
+					}
+				}
+			}
+		},
+
+		/*
 		| função: getMeal
 		| Utilizando a classe auxiliar ApiHelper, cria a URL, faz uma chamada GET para API buscando os dados das receitas da categoria
 		| ---- */
 		getMeal: function () {
-			if ((this.mealId)>0) {
+			if (this.mealId > 0) {
 				const apiHelper = new ApiHelper("1");
 				let mealEndpoint = apiHelper.Endpoints.mealDetail;
 				let mealUrl = apiHelper.buildRequestUrl(mealEndpoint, this.mealId);
-				
+
 				if (LibUtils.isFilled(mealUrl)) {
 					axios
 						.get(mealUrl)
@@ -80,8 +122,23 @@ export default Vue.extend({
 		| ---- */
 		verifyData: function (data) {
 			if (LibUtils.isFilled(data)) {
-				debugger
-				this.meal = data.meal || {};
+				let returnedMeals = data.meals || [];
+				this.meal = returnedMeals[0] || {};
+				this.mealName = this.meal.strMeal || "";
+				this.normalizeIngredients();
+			}
+		},
+
+		/*
+		| função: returnToCategory
+		| Volta para a page de receitas referente a mesma categoria desta receita atual
+		| ---- */
+		returnToCategory: function () {
+			if (LibUtils.isFilled(this.meal)) {
+				let params = {
+					category: this.meal.strCategory,
+				};
+				this.navigate("receitas-categoria", params);
 			}
 		},
 	},
@@ -89,7 +146,52 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.meals-holder {
+.page-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 15%;
+}
+
+.header-left {
+	display: inline-flex;
+	flex-grow: 1;
+	flex-direction: column;
+	align-items: center;
+}
+
+.header-right {
+	display: inline-flex;
+	width: 256px;
+	align-items: center;
+}
+
+.meal-name{
+	text-align: left;
+}
+
+.meal-category {
+	width: 100%;
+	color: #666666;
+	text-align: left;
+	margin: 0;
+}
+
+.meal-category:hover {
+	cursor: pointer;
+	color: var(--system-primary-color);
+}
+
+.meal-photo {
+	max-width: 256px;
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+}
+
+.meal-holder {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
@@ -102,68 +204,15 @@ export default Vue.extend({
 	transition: 0.4s height ease-in;
 }
 
-.meal-row {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	border-radius: 4px;
-	border: 1px solid rgb(210, 210, 210);
-	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.15);
-	transition: 0.3s all ease-in;
-	align-items: center;
-}
-
-.meal-row:hover {
-	border-color: rgb(175, 175, 175);
-	background: rgba(40, 170, 60, 0.4);
-	cursor: pointer;
-}
-
-.meal-row:hover .meal-name {
-	color: #000000;
-}
-
-.meal-image-holder {
-	display: inline-flex;
-	width: 86px;
-	height: 86px;
-	padding: 0 5px;
-	flex-shrink: 0;
-}
-
-.meal-image-holder img {
-	display: block;
-	width: 100%;
-	height: auto;
-	max-height: 86px;
-	object-fit: contain;
-	margin: 0 auto;
+.meal-section-title {
 	text-align: center;
-}
-
-.meal-name {
-	display: inline-flex;
-	padding: 0 12px;
-	color: #222222;
-}
-
-.pagination-box {
-	padding-left: 20%;
-	padding-right: 20%;
-}
-
-.pagination-box button {
-	font-size: 18px;
+	color: var(--system-primary-color-dark);
+	margin: 5px;
 }
 
 @media (max-width: 991px) {
-	.meals-holder {
+	.meal-holder {
 		margin: 0 2% 10px 2%;
-	}
-
-	.pagination-box {
-		padding-left: 2%;
-		padding-right: 2%;
 	}
 }
 
@@ -175,18 +224,8 @@ export default Vue.extend({
 		width: 86px;
 	}
 
-	.meals-holder {
+	.meal-holder {
 		padding: 5px;
-	}
-
-	.pagination-box {
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-
-	.input-pesquisa-box {
-		width: 90%;
-		margin: 8px auto;
 	}
 }
 </style>
